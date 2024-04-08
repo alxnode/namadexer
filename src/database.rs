@@ -1121,7 +1121,7 @@ impl Database {
     /// Returns Transaction identified by hash
     pub async fn get_tx(&self, hash: &[u8]) -> Result<Option<Row>, Error> {
         // query for transaction with hash
-       let query_str = format!(
+       let str = format!(
         "SELECT t.*, b.header_height, b.header_time
         FROM {}.{} t
         JOIN {}.{} b ON t.block_id = b.block_id
