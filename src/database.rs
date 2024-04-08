@@ -1121,10 +1121,13 @@ impl Database {
     /// Returns Transaction identified by hash
     pub async fn get_tx(&self, hash: &[u8]) -> Result<Option<Row>, Error> {
         // query for transaction with hash
-        let str = format!(
-            "SELECT * FROM {}.{TX_TABLE_NAME} WHERE hash=$1",
-            self.network
-        );
+       let query_str = format!(
+        "SELECT t.*, b.header_height, b.header_time
+        FROM {}.{} t
+        JOIN {}.{} b ON t.block_id = b.block_id
+        WHERE t.hash=$1;",
+        self.network, TX_TABLE_NAME, self.network, BLOCKS_TABLE_NAME
+    );
 
         query(&str)
             .bind(hash)
