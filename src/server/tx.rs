@@ -46,6 +46,8 @@ pub struct TxInfo {
     #[serde(serialize_with = "serialize_optional_hex")]
     code: Option<Vec<u8>>,
     data: Option<serde_json::Value>,
+    header_height: Option<i32>,
+    header_time: Option<String>,
     return_code: Option<i32>, // New field for return_code
 }
 
@@ -91,6 +93,8 @@ impl TryFrom<Row> for TxInfo {
         let gas_limit_multiplier = row.try_get("gas_limit_multiplier")?;
         let code: Option<Vec<u8>> = row.try_get("code")?;
         let data: Option<serde_json::Value> = row.try_get("data")?;
+        let header_height: Option<i32> = row.try_get("header_height")?;
+        let header_time: Option<String> = row.try_get("header_time")?;
         let return_code = row.try_get("return_code")?;
 
         Ok(Self {
@@ -104,6 +108,8 @@ impl TryFrom<Row> for TxInfo {
             code,
             data,
             return_code, // Assigning return_code to the struct field
+            header_height,
+            header_time,
         })
     }
 }
